@@ -295,7 +295,7 @@ ax.errorbar(x_axis, stelasyn_tumor_means, stelasyn_tumor_errors, fmt="--o", caps
 ax.errorbar(x_axis, zoniferol_tumor_means, zoniferol_tumor_errors, fmt="--o", capsize=2, label="Zoniferol")
 ```
 
-![png](output_5_0.png)
+![png](Images/output_5_0.png)
 
 ### Metastatic Response to Treatment
 
@@ -555,7 +555,7 @@ ax.errorbar(x_axis, stelasyn_sites_means, stelasyn_sites_errors, fmt="--o", caps
 ax.errorbar(x_axis, zoniferol_sites_means, zoniferol_sites_errors, fmt="--o", capsize=2, label="Zoniferol")
 ```
 
-![png](output_8_0.png)
+![png](Images/output_8_0.png)
 
 ### Survival Rate
 
@@ -782,7 +782,7 @@ plt.plot(zoniferol_mice_df['Timepoint'], zoniferol_mice_df['Mouse ID'], '--o', l
 ```
 
 
-![png](output_11_0.png)
+![png](Images/output_11_0.png)
 
 
 ### Percent Change in Tumor Volume
@@ -859,5 +859,5 @@ autolabel(percent_plot, ax)
 ```
 
 
-![png](output_13_0.png)
+![png](Images/output_13_0.png)
 

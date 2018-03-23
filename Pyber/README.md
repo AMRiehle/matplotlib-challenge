@@ -130,7 +130,7 @@ print("Note: Circle size corresponds with driver counts per city.")
 
 
 
-![png](output_4_1.png)
+![png](Images/output_4_1.png)
 
 
 ### Total Fares by City Type
@@ -145,7 +145,7 @@ plt.title('Percent of Fares by City Type', fontweight='bold', fontsize=14)
 plt.ylabel("")
 ```
 
-![png](output_6_1.png)
+![png](Images/output_6_1.png)
 
 
 ### Total Rides by City Type
@@ -158,7 +158,7 @@ trips_chart.set_ylabel('')
 plt.title('Percent of Rides by City Type', fontweight='bold', fontsize=14)
 ```
 
-![png](output_8_1.png)
+![png](Images/output_8_1.png)
 
 
 ### Total Drivers by City Type
@@ -171,5 +171,5 @@ drivers_chart.set_ylabel('')
 plt.title('Percent of Drivers by City Type', fontweight='bold', fontsize=14)
 ```
 
-![png](output_10_1.png)
+![png](Images/output_10_1.png)
 
