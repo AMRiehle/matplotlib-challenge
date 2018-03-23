@@ -1,5 +1,5 @@
 # matplotlib-challenge
-**GWU Data Analytics Bootcamp Homework 4**
+**GWU Data Analytics Bootcamp Homework 5**
 
 This repository includes two separate challenges
 
