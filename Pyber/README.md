@@ -8,18 +8,25 @@ GWU Data Analytics Bootcamp Homework 5
 
 
 ```python
+# Import dependencies
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-city_csv = "raw_data/city_data.csv"
-rides_csv = "raw_data/ride_data.csv"
+# Read in City data
 
+city_csv = "raw_data/city_data.csv"
 city_df = pd.read_csv(city_csv)
 city_df.head()
 
+# Read in Rides data
+
+rides_csv = "raw_data/ride_data.csv"
 ride_df = pd.read_csv(rides_csv)
 ride_df.head()
+
+# Merge data sets
 
 df = pd.merge(city_df, ride_df, how="outer", on="city")
 df.head()
@@ -90,25 +97,35 @@ df.head()
 
 
 ```python
+# Filter and aggregate urban data in preparation for charting
+
 urban_df = df.loc[df['type'] == 'Urban', :]
 urban_fares = urban_df.groupby('city')['fare'].mean()
 urban_rides = urban_df.groupby('city')['ride_id'].count()
 urban_drivers = city_df.loc[city_df['type'] == 'Urban', ['city','driver_count']].set_index('city')
+
+# Filter and aggregate suburban data in preparation for charting
 
 suburban_df = df.loc[df['type'] == 'Suburban', :]
 suburban_fares = suburban_df.groupby('city')['fare'].mean()
 suburban_rides = suburban_df.groupby('city')['ride_id'].count()
 suburban_drivers = city_df.loc[city_df['type'] == 'Suburban', ['city','driver_count']].set_index('city')
 
+# Filter and aggregate rural data in preparation for charting
+
 rural_df = df.loc[df['type'] == 'Rural', :]
 rural_fares = rural_df.groupby('city')['fare'].mean()
 rural_rides = rural_df.groupby('city')['ride_id'].count()
 rural_drivers = city_df.loc[city_df['type'] == 'Rural', ['city','driver_count']].set_index('city')
 
+# Create scatterplot and add data
+
 fig, ax = plt.subplots()
 plt.scatter(urban_rides, urban_fares, marker="o", facecolors="lightskyblue", edgecolor="blue", s=urban_drivers*8, label="Urban")
 plt.scatter(suburban_rides, suburban_fares, marker="o", facecolors="lightcoral", edgecolor="red", s=suburban_drivers*8, label="Suburban")
 plt.scatter(rural_rides, rural_fares, marker="o", facecolors="gold", s=rural_drivers*8, label="Rural", edgecolor="orange")
+
+# Format scatterplot
 
 lgnd = ax.legend(title="City Types")
 lgnd.legendHandles[0]._sizes = [100]
@@ -137,6 +154,8 @@ print("Note: Circle size corresponds with driver counts per city.")
 
 
 ```python
+# Create pie chart
+
 colors = ['gold', 'lightcoral', 'lightskyblue']
 explode = [0, 0.02, 0.1]
 fares_df = df.groupby('type')['fare'].sum()
@@ -152,6 +171,8 @@ plt.ylabel("")
 
 
 ```python
+# Create pie chart
+
 trips_df = df.groupby('type')['ride_id'].count()
 trips_chart = trips_df.plot(kind='pie', colors=colors, explode=explode, shadow=True, figsize=(4.5,4.5), autopct="%1.1f%%", startangle=-22)
 trips_chart.set_ylabel('')
@@ -165,6 +186,8 @@ plt.title('Percent of Rides by City Type', fontweight='bold', fontsize=14)
 
 
 ```python
+# Create pie chart
+
 drivers_df = city_df.groupby('type')['driver_count'].sum()
 drivers_chart = drivers_df.plot(kind='pie', colors=colors, explode=explode, shadow=True, figsize=(4.5,4.5), autopct="%1.1f%%")
 drivers_chart.set_ylabel('')
