@@ -22,16 +22,72 @@ from scipy.stats import sem
 trial_csv = "raw_data/clinicaltrial_data.csv"
 trial_df = pd.read_csv(trial_csv)
 
-# Find and read in mouse data
+# Find and read in mouse data, removing Mouse ID associated with multiple drugs
 
 mouse_csv = "raw_data/mouse_drug_data.csv"
 mouse_df = pd.read_csv(mouse_csv)
+mouse_df = mouse_df.loc[mouse_df['Mouse ID'] != "g989", :]
 
 # Merge Data Sets
 
 df = pd.merge(trial_df, mouse_df, on="Mouse ID")
 df.head()
 ```
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Mouse ID</th>
+      <th>Timepoint</th>
+      <th>Tumor Volume (mm3)</th>
+      <th>Metastatic Sites</th>
+      <th>Drug</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>b128</td>
+      <td>0</td>
+      <td>45.000000</td>
+      <td>0</td>
+      <td>Capomulin</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>b128</td>
+      <td>5</td>
+      <td>45.651331</td>
+      <td>0</td>
+      <td>Capomulin</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>b128</td>
+      <td>10</td>
+      <td>43.270852</td>
+      <td>0</td>
+      <td>Capomulin</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>b128</td>
+      <td>15</td>
+      <td>43.784893</td>
+      <td>0</td>
+      <td>Capomulin</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>b128</td>
+      <td>20</td>
+      <td>42.731552</td>
+      <td>0</td>
+      <td>Capomulin</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Tumor Response to Treatment
 
@@ -111,9 +167,9 @@ drugs_tumors_df
       <td>47.389175</td>
       <td>46.796098</td>
       <td>47.125589</td>
-      <td>47.248967</td>
+      <td>47.168130</td>
       <td>43.944859</td>
-      <td>47.527452</td>
+      <td>47.470830</td>
       <td>46.851818</td>
     </tr>
     <tr>
@@ -124,9 +180,9 @@ drugs_tumors_df
       <td>49.582269</td>
       <td>48.694210</td>
       <td>49.423329</td>
-      <td>49.101541</td>
+      <td>48.938560</td>
       <td>42.531957</td>
-      <td>49.463844</td>
+      <td>49.335368</td>
       <td>48.689881</td>
     </tr>
     <tr>
@@ -137,9 +193,9 @@ drugs_tumors_df
       <td>52.399974</td>
       <td>50.933018</td>
       <td>51.359742</td>
-      <td>51.067318</td>
+      <td>50.891769</td>
       <td>41.495061</td>
-      <td>51.529409</td>
+      <td>51.448025</td>
       <td>50.779059</td>
     </tr>
     <tr>
@@ -150,9 +206,9 @@ drugs_tumors_df
       <td>54.920935</td>
       <td>53.644087</td>
       <td>54.364417</td>
-      <td>53.346737</td>
+      <td>53.127384</td>
       <td>40.238325</td>
-      <td>54.067395</td>
+      <td>53.970080</td>
       <td>53.170334</td>
     </tr>
     <tr>
@@ -163,9 +219,9 @@ drugs_tumors_df
       <td>57.678982</td>
       <td>56.731968</td>
       <td>57.482574</td>
-      <td>55.504138</td>
+      <td>55.462490</td>
       <td>38.974300</td>
-      <td>56.166123</td>
+      <td>56.172821</td>
       <td>55.432935</td>
     </tr>
     <tr>
@@ -176,9 +232,9 @@ drugs_tumors_df
       <td>60.994507</td>
       <td>59.559509</td>
       <td>59.809063</td>
-      <td>58.196374</td>
+      <td>58.122548</td>
       <td>38.703137</td>
-      <td>59.826738</td>
+      <td>59.870528</td>
       <td>57.713531</td>
     </tr>
     <tr>
@@ -189,9 +245,9 @@ drugs_tumors_df
       <td>63.371686</td>
       <td>62.685087</td>
       <td>62.420615</td>
-      <td>60.350199</td>
+      <td>60.103457</td>
       <td>37.451996</td>
-      <td>62.440699</td>
+      <td>62.432021</td>
       <td>60.089372</td>
     </tr>
     <tr>
@@ -273,13 +329,12 @@ zoniferol_tumor_errors = zoniferol_tumor_df['Tumor Error']
 
 x_axis = drugs_tumors_df.index.values
 
-# Format chart (size, labels, title, legend)
+# Format chart (size, labels, title)
 
 fig, ax = plt.subplots(figsize=(10.5,6))
 ax.set_xlabel("Time (Days)", fontsize=12, fontweight='bold')
 ax.set_ylabel("Tumor Volume (mm3)", fontsize=12, fontweight='bold')
 ax.set_title("Tumor Response to Treatment", fontsize=16, fontweight='bold')
-lgnd = ax.legend(loc="upper left", title="Drug Type")
 
 # Add data to chart
 
@@ -293,9 +348,14 @@ ax.errorbar(x_axis, propriva_tumor_means, propriva_tumor_errors, fmt="--o", caps
 ax.errorbar(x_axis, ramicane_tumor_means, ramicane_tumor_errors, fmt="--o", capsize=2, label="Ramicane")
 ax.errorbar(x_axis, stelasyn_tumor_means, stelasyn_tumor_errors, fmt="--o", capsize=2, label="Stelasyn")
 ax.errorbar(x_axis, zoniferol_tumor_means, zoniferol_tumor_errors, fmt="--o", capsize=2, label="Zoniferol")
+
+# Add Legend
+
+ax.legend(loc="upper left", title="Drug Type")
 ```
 
-![png](Images/output_5_0.png)
+![png](Images/output_5_1.png)
+
 
 ### Metastatic Response to Treatment
 
@@ -371,9 +431,9 @@ drugs_sites_df
       <td>0.304348</td>
       <td>0.260870</td>
       <td>0.375000</td>
-      <td>0.320000</td>
+      <td>0.347826</td>
       <td>0.120000</td>
-      <td>0.240000</td>
+      <td>0.260870</td>
       <td>0.166667</td>
     </tr>
     <tr>
@@ -384,9 +444,9 @@ drugs_sites_df
       <td>0.590909</td>
       <td>0.523810</td>
       <td>0.833333</td>
-      <td>0.565217</td>
+      <td>0.619048</td>
       <td>0.250000</td>
-      <td>0.478261</td>
+      <td>0.523810</td>
       <td>0.500000</td>
     </tr>
     <tr>
@@ -397,9 +457,9 @@ drugs_sites_df
       <td>0.842105</td>
       <td>0.857143</td>
       <td>1.250000</td>
-      <td>0.764706</td>
+      <td>0.800000</td>
       <td>0.333333</td>
-      <td>0.782609</td>
+      <td>0.809524</td>
       <td>0.809524</td>
     </tr>
     <tr>
@@ -412,7 +472,7 @@ drugs_sites_df
       <td>1.526316</td>
       <td>1.000000</td>
       <td>0.347826</td>
-      <td>0.952381</td>
+      <td>0.947368</td>
       <td>1.294118</td>
     </tr>
     <tr>
@@ -423,9 +483,9 @@ drugs_sites_df
       <td>1.631579</td>
       <td>1.500000</td>
       <td>1.941176</td>
-      <td>1.357143</td>
+      <td>1.384615</td>
       <td>0.652174</td>
-      <td>1.157895</td>
+      <td>1.166667</td>
       <td>1.687500</td>
     </tr>
     <tr>
@@ -436,9 +496,9 @@ drugs_sites_df
       <td>2.055556</td>
       <td>2.066667</td>
       <td>2.266667</td>
-      <td>1.615385</td>
+      <td>1.666667</td>
       <td>0.782609</td>
-      <td>1.388889</td>
+      <td>1.411765</td>
       <td>1.933333</td>
     </tr>
     <tr>
@@ -449,9 +509,9 @@ drugs_sites_df
       <td>2.294118</td>
       <td>2.266667</td>
       <td>2.642857</td>
-      <td>2.300000</td>
+      <td>2.333333</td>
       <td>0.952381</td>
-      <td>1.562500</td>
+      <td>1.533333</td>
       <td>2.285714</td>
     </tr>
     <tr>
@@ -533,13 +593,12 @@ zoniferol_sites_errors = zoniferol_sites_df['Metastatic Error']
 
 x_axis = drugs_sites_df.index.values
 
-# Format chart (size, labels, title, legend)
+# Format chart (size, labels, title)
 
 fig, ax = plt.subplots(figsize=(10.5,6))
 ax.set_xlabel("Time (Days)", fontsize=12, fontweight='bold')
 ax.set_ylabel("Metastatic Sites", fontsize=12, fontweight='bold')
 ax.set_title("Metastatic Spread During Treatment", fontsize=16, fontweight='bold')
-lgnd = ax.legend(loc="upper left", title="Drug Type")
 
 # Add data to chart
 
@@ -553,9 +612,13 @@ ax.errorbar(x_axis, propriva_sites_means, propriva_sites_errors, fmt="--o", caps
 ax.errorbar(x_axis, ramicane_sites_means, ramicane_sites_errors, fmt="--o", capsize=2, label="Ramicane")
 ax.errorbar(x_axis, stelasyn_sites_means, stelasyn_sites_errors, fmt="--o", capsize=2, label="Stelasyn")
 ax.errorbar(x_axis, zoniferol_sites_means, zoniferol_sites_errors, fmt="--o", capsize=2, label="Zoniferol")
+
+# Add Legend
+
+ax.legend(loc="upper left", title="Drug Type")
 ```
 
-![png](Images/output_8_0.png)
+![png](Images/output_8_1.png)
 
 ### Survival Rate
 
@@ -616,9 +679,9 @@ drugs_mice_df
       <td>25</td>
       <td>25</td>
       <td>25</td>
-      <td>26</td>
+      <td>24</td>
       <td>25</td>
-      <td>26</td>
+      <td>24</td>
       <td>25</td>
     </tr>
     <tr>
@@ -629,9 +692,9 @@ drugs_mice_df
       <td>23</td>
       <td>23</td>
       <td>24</td>
+      <td>23</td>
       <td>25</td>
-      <td>25</td>
-      <td>25</td>
+      <td>23</td>
       <td>24</td>
     </tr>
     <tr>
@@ -642,9 +705,9 @@ drugs_mice_df
       <td>22</td>
       <td>21</td>
       <td>24</td>
-      <td>23</td>
+      <td>21</td>
       <td>24</td>
-      <td>23</td>
+      <td>21</td>
       <td>22</td>
     </tr>
     <tr>
@@ -655,9 +718,9 @@ drugs_mice_df
       <td>19</td>
       <td>21</td>
       <td>20</td>
-      <td>17</td>
+      <td>15</td>
       <td>24</td>
-      <td>23</td>
+      <td>21</td>
       <td>21</td>
     </tr>
     <tr>
@@ -668,9 +731,9 @@ drugs_mice_df
       <td>19</td>
       <td>20</td>
       <td>19</td>
-      <td>17</td>
+      <td>15</td>
       <td>23</td>
-      <td>21</td>
+      <td>19</td>
       <td>17</td>
     </tr>
     <tr>
@@ -681,9 +744,9 @@ drugs_mice_df
       <td>19</td>
       <td>18</td>
       <td>17</td>
-      <td>14</td>
+      <td>13</td>
       <td>23</td>
-      <td>19</td>
+      <td>18</td>
       <td>16</td>
     </tr>
     <tr>
@@ -694,9 +757,9 @@ drugs_mice_df
       <td>18</td>
       <td>15</td>
       <td>15</td>
-      <td>13</td>
+      <td>12</td>
       <td>23</td>
-      <td>18</td>
+      <td>17</td>
       <td>15</td>
     </tr>
     <tr>
@@ -707,9 +770,9 @@ drugs_mice_df
       <td>17</td>
       <td>15</td>
       <td>14</td>
-      <td>10</td>
+      <td>9</td>
       <td>21</td>
-      <td>16</td>
+      <td>15</td>
       <td>14</td>
     </tr>
     <tr>
@@ -759,13 +822,12 @@ zoniferol_mice_df = mouse_count_df_reset.loc[mouse_count_df_reset['Drug'] == 'Zo
 
 x_axis = drugs_mice_df.index.values
 
-# Format chart (size, labels, title, legend)
+# Format chart (size, labels, title)
 
 plt.subplots(figsize=(10.5,6))
 plt.xlabel("Time (Days)", fontsize=12, fontweight='bold')
 plt.ylabel("Number of Surviving Mice", fontsize=12, fontweight='bold')
 plt.title("Survival During Treatment", fontsize=16, fontweight='bold')
-lgnd = plt.legend(loc="best", title="Drug Type")
 
 # Add data to chart
 
@@ -779,10 +841,13 @@ plt.plot(propriva_mice_df['Timepoint'], propriva_mice_df['Mouse ID'], '--o', lab
 plt.plot(ramicane_mice_df['Timepoint'], ramicane_mice_df['Mouse ID'], '--o', label="Ramicane")
 plt.plot(stelasyn_mice_df['Timepoint'], stelasyn_mice_df['Mouse ID'], '--o', label="Stelasyn")
 plt.plot(zoniferol_mice_df['Timepoint'], zoniferol_mice_df['Mouse ID'], '--o', label="Zoniferol")
+
+# Add Legend
+
+plt.legend(loc="best", title="Drug Type")
 ```
 
-
-![png](Images/output_11_0.png)
+![png](Images/output_11_1.png)
 
 
 ### Percent Change in Tumor Volume
