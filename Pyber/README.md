@@ -4,7 +4,7 @@ GWU Data Analytics Bootcamp Homework 5
 
 * Generally speaking, the higher the number of rides, the lower the average fare.
 * Despite having lower average fares, rides in Urban areas still bring in the highest total revenue.
-* The more urban an area, the more business Pyber is likely to do in that city.
+* The more urban an area, the more business Pyber is likely to do in that area.
 
 
 ```python
@@ -14,21 +14,21 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-# Read in City data
+# Read in City data, removing duplicate data 
+# Was asked to keep one instance of duplicate city, so kept city instance with higher driver count
 
 city_csv = "raw_data/city_data.csv"
 city_df = pd.read_csv(city_csv)
-city_df.head()
+city_df = city_df.loc[(city_df['city'] != "Port James") | (city_df['driver_count'] == 15), :]
 
 # Read in Rides data
 
 rides_csv = "raw_data/ride_data.csv"
 ride_df = pd.read_csv(rides_csv)
-ride_df.head()
 
 # Merge data sets
 
-df = pd.merge(city_df, ride_df, how="outer", on="city")
+df = pd.merge(city_df, ride_df, on="city")
 df.head()
 ```
 
@@ -125,7 +125,7 @@ plt.scatter(urban_rides, urban_fares, marker="o", facecolors="lightskyblue", edg
 plt.scatter(suburban_rides, suburban_fares, marker="o", facecolors="lightcoral", edgecolor="red", s=suburban_drivers*8, label="Suburban")
 plt.scatter(rural_rides, rural_fares, marker="o", facecolors="gold", s=rural_drivers*8, label="Rural", edgecolor="orange")
 
-# Format scatterplot
+# Format scatterplot, removing outlier datapoint from plot via y-limits
 
 lgnd = ax.legend(title="City Types")
 lgnd.legendHandles[0]._sizes = [100]
@@ -144,7 +144,6 @@ print("Note: Circle size corresponds with driver counts per city.")
 ```
 
     Note: Circle size corresponds with driver counts per city.
-
 
 
 ![png](Images/output_4_1.png)
@@ -166,7 +165,6 @@ plt.ylabel("")
 
 ![png](Images/output_6_1.png)
 
-
 ### Total Rides by City Type
 
 
@@ -180,7 +178,6 @@ plt.title('Percent of Rides by City Type', fontweight='bold', fontsize=14)
 ```
 
 ![png](Images/output_8_1.png)
-
 
 ### Total Drivers by City Type
 
